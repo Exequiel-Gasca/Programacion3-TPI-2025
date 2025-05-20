@@ -1,14 +1,62 @@
-import { useState } from 'react'
-import './App.css'
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Register from "./components/Register";
+import LoginUser from "./components/LoginUser";
+import LoginAdmin from "./components/LoginAdmin";
+import Servicios from "./components/Servicios";
+import CrearServicio from "./components/CrearServicio";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleLogin = (token, isAdminFlag) => {
+    setToken(token);
+    setIsAdmin(isAdminFlag);
+    localStorage.setItem("token", token);
+  };
+
+  const handleLogout = () => {
+    setToken(null);
+    setIsAdmin(false);
+    localStorage.removeItem("token");
+  };
 
   return (
-    <>
-      
-    </>
-  )
+    <BrowserRouter>
+      <NavBar token={token} isAdmin={isAdmin} onLogout={handleLogout} />
+      {message && (
+        <div style={{ color: "red", textAlign: "center" }}>{message}</div>
+      )}
+      <Routes>
+        <Route
+          path="/register"
+          element={<Register setMessage={setMessage} />}
+        />
+        <Route
+          path="/login"
+          element={<LoginUser onLogin={handleLogin} setMessage={setMessage} />}
+        />
+        <Route
+          path="/login/admin"
+          element={<LoginAdmin onLogin={handleLogin} setMessage={setMessage} />}
+        />
+        <Route path="/servicios" element={<Servicios token={token} />} />
+        <Route
+          path="/crear-servicio"
+          element={
+            <CrearServicio
+              token={token}
+              isAdmin={isAdmin}
+              setMessage={setMessage}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
