@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .icons path{
     fill: #C6AB80;
 }
@@ -106,6 +107,7 @@ border-bottom:1px solid #C6AB80;
     border-bottom: 1px solid #C6AB80;
     width:120%;
 }
+=======
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -130,3 +132,4 @@ body {
   src: url("./assets/fonts/GloucesterMT-ExtraCondensed.ttf") format("truetype");
 }
 /*---------------------------------------------    CAROUSEL    ------------------------------------------------------*/
+>>>>>>> main
