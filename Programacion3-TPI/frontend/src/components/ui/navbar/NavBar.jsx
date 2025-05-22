@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import "./NavBar.css";
 
 function NavBar({ token, isAdmin, onLogout }) {
   const navigate = useNavigate();
