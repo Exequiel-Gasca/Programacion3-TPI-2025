@@ -7,6 +7,7 @@ import LoginAdmin from "./components/LoginAdmin";
 import Servicios from "./components/Servicios";
 import CreateService from "./components/CreateService";
 import BarberCarousel from "./components/ui/barbercarousel/BarberCarousel";
+import Footer from "./components/ui/footer/Footer";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -64,6 +65,8 @@ function App() {
       </BrowserRouter>
 
       <BarberCarousel />
+
+      <Footer />
     </div>
   );
 }

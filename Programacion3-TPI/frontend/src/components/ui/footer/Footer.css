@@ -1,0 +1,116 @@
+.icons path {
+  fill: #c6ab80;
+}
+
+.icons {
+  width: 35px;
+  height: 35px;
+}
+
+span {
+  position: relative;
+  bottom: 10%;
+}
+
+p {
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  color: whitesmoke;
+}
+
+#nuestras_redes > ul > li:nth-child(2) {
+  position: relative;
+  left: 4.5rem;
+}
+li:nth-child(4) {
+  position: relative;
+  right: 3.5%;
+}
+li:nth-child(5) {
+  position: relative;
+  right: 7.2%;
+}
+li:nth-child(6) {
+  position: relative;
+  right: 9.5%;
+}
+
+li:nth-child(3) {
+  position: relative;
+  left: 3.8rem;
+}
+
+li:nth-child(3) > span {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+}
+
+li:nth-child(6) > a > span {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  color: whitesmoke;
+}
+
+h3,
+p {
+  color: whitesmoke;
+}
+
+#nuestras_redes > ul > li > a {
+  text-decoration: none;
+}
+
+body {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+}
+
+footer {
+  background-color: rgb(30, 30, 30);
+  border-radius: 7px;
+}
+
+#contenido_principal {
+  display: flex;
+  flex-direction: column;
+}
+#nuestras_redes > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  margin-left: 5%;
+  gap: 8%;
+  margin-right: 25%;
+}
+
+#nuestras_redes > h3 {
+  margin-left: 2em;
+  position: relative;
+  left: 1.8rem;
+  border-bottom: solid #c6ab80 1px;
+}
+
+#nuestras_redes {
+  margin-right: 14%;
+  margin-left: 12%;
+  position: relative;
+  bottom: 5.9em;
+  gap: 4px;
+}
+#Ayuda {
+  position: relative;
+  top: 0.8em;
+}
+#Ayuda > h3 {
+  position: relative;
+  display: inline-block;
+  left: 1.7rem;
+  padding-right: 8%;
+  border-bottom: solid #c6ab80 1px;
+}
