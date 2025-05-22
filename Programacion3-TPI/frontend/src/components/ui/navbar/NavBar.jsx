@@ -1,4 +1,3 @@
-import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -11,36 +10,50 @@ function NavBar({ token, isAdmin, onLogout }) {
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary mb-4">
-      <Container>
-        <Navbar.Brand as={Link} to="/">
-          Peluquería TUP
+    <Navbar expand="lg" className="barber-navbar bg-body-tertiary">
+      <Container fluid>
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="d-flex align-items-center gap-2"
+        >
+          <img
+            src="../../../../public/barbershop.png"
+            width={"65"}
+            height={"65"}
+            alt="logo"
+          />
+          <p className="store-name mb-0">BARBERSHOP</p>
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="ms-auto d-flex flex-row align-items-center gap-3">
             <Nav.Link as={Link} to="/servicios">
-              Servicios
+              Sobre Nosotros
+            </Nav.Link>
+            <Nav.Link as={Link} to="/servicios">
+              Ubicaciones
+            </Nav.Link>
+            <Nav.Link as={Link} to="/servicios">
+              Nuestros Servicios
             </Nav.Link>
             {isAdmin && (
               <Nav.Link as={Link} to="/crear-servicio">
                 Crear Servicio
               </Nav.Link>
             )}
-          </Nav>
 
-          <Nav className="ms-auto">
             {!token ? (
               <>
                 <Nav.Link as={Link} to="/login">
-                  Login
-                </Nav.Link>
-                <Nav.Link as={Link} to="/register">
-                  Registrarse
+                  <Button className="navbar-button" size="lg">
+                    Ingresar
+                  </Button>
                 </Nav.Link>
               </>
             ) : (
-              <Button variant="outline-danger" onClick={handleLogout}>
+              <Button className="navbar-button" onClick={handleLogout}>
                 Logout
               </Button>
             )}

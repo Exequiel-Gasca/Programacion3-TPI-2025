@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/ui/navbar/NavBar";
 import Register from "./components/Register";
 import LoginUser from "./components/LoginUser";
 import LoginAdmin from "./components/LoginAdmin";
 import Servicios from "./components/Servicios";
-import CrearServicio from "./components/CrearServicio";
+import CreateService from "./components/CreateService";
+import BarberCarousel from "./components/ui/barbercarousel/BarberCarousel";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -25,37 +26,45 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <NavBar token={token} isAdmin={isAdmin} onLogout={handleLogout} />
-      {message && (
-        <div style={{ color: "red", textAlign: "center" }}>{message}</div>
-      )}
-      <Routes>
-        <Route
-          path="/register"
-          element={<Register setMessage={setMessage} />}
-        />
-        <Route
-          path="/login"
-          element={<LoginUser onLogin={handleLogin} setMessage={setMessage} />}
-        />
-        <Route
-          path="/login/admin"
-          element={<LoginAdmin onLogin={handleLogin} setMessage={setMessage} />}
-        />
-        <Route path="/servicios" element={<Servicios token={token} />} />
-        <Route
-          path="/crear-servicio"
-          element={
-            <CrearServicio
-              token={token}
-              isAdmin={isAdmin}
-              setMessage={setMessage}
-            />
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <NavBar token={token} isAdmin={isAdmin} onLogout={handleLogout} />
+        {message && (
+          <div style={{ color: "red", textAlign: "center" }}>{message}</div>
+        )}
+        <Routes>
+          <Route
+            path="/register"
+            element={<Register setMessage={setMessage} />}
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginUser onLogin={handleLogin} setMessage={setMessage} />
+            }
+          />
+          <Route
+            path="/login/admin"
+            element={
+              <LoginAdmin onLogin={handleLogin} setMessage={setMessage} />
+            }
+          />
+          <Route path="/servicios" element={<Servicios token={token} />} />
+          <Route
+            path="/crear-servicio"
+            element={
+              <CreateService
+                token={token}
+                isAdmin={isAdmin}
+                setMessage={setMessage}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+
+      <BarberCarousel />
+    </div>
   );
 }
 
