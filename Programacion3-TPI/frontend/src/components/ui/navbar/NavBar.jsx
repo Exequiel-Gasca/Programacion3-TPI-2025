@@ -1,5 +1,6 @@
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Button, Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { Person } from "react-bootstrap-icons";
 import "./NavBar.css";
 
 function NavBar({ token, isAdmin, onLogout }) {
@@ -7,7 +8,7 @@ function NavBar({ token, isAdmin, onLogout }) {
 
   const handleLogout = () => {
     onLogout(); // limpia el token en App
-    navigate("/login"); // redirige al login
+    navigate("/"); // redirige al home
   };
 
   return (
@@ -27,13 +28,16 @@ function NavBar({ token, isAdmin, onLogout }) {
           <p className="store-name mb-0">BARBERSHOP</p>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle
+          className="navbar-toggle"
+          aria-controls="basic-navbar-nav"
+        />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto d-flex flex-row align-items-center gap-3">
             <Nav.Link as={Link} to="/servicios">
               Sobre Nosotros
             </Nav.Link>
-            <Nav.Link as={Link} to="/servicios">
+            <Nav.Link as={Link} to="/locations">
               Ubicaciones
             </Nav.Link>
             <Nav.Link as={Link} to="/servicios">
@@ -54,9 +58,23 @@ function NavBar({ token, isAdmin, onLogout }) {
                 </Nav.Link>
               </>
             ) : (
-              <Button className="navbar-button" onClick={handleLogout}>
-                Logout
-              </Button>
+              <Dropdown>
+                <Dropdown.Toggle className="navbar-button" id="dropdown-basic">
+                  <Person /> Mi Perfil
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Mensajes</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Configuración</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    className="logout-button"
+                    href="/"
+                    onClick={handleLogout}
+                  >
+                    Cerrar Sesión
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             )}
           </Nav>
         </Navbar.Collapse>
@@ -66,3 +84,6 @@ function NavBar({ token, isAdmin, onLogout }) {
 }
 
 export default NavBar;
+/*                              <Button className="navbar-button" onClick={handleLogout}>
+                  <Person /> Mi Perfil
+                </Button>*/

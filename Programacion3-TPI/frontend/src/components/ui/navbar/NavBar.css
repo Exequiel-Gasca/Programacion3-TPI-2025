@@ -17,6 +17,32 @@
   display: inline-block;
 }
 
+.navbar-button:hover {
+  background-color: #745348 !important;
+  border: #2b211e 3px solid !important;
+}
+
+.dropdown.show .navbar-button {
+  background-color: #745348 !important;
+  border: #2b211e 3px solid !important;
+}
+
+.navbar-toggle {
+  background-color: #56382e;
+  color: #f5f5dc;
+  border: #2b211e 3px solid;
+}
+
+.logout-button {
+  background-color: #b02a37;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #be4551;
+  color: white;
+}
+
 .barber-navbar {
   background-color: #a3795b !important;
 }
