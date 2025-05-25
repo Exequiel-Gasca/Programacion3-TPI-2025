@@ -21,8 +21,8 @@ function LoginUser({ onLogin, setMessage }) {
       if (!res.ok) {
         setMessage(data.message || "Error en login");
       } else {
-        onLogin(data, false);
-        navigate("/servicios");
+        onLogin(data, data.isAdmin);
+        navigate("/turns");
       }
     } catch {
       setMessage("Error en comunicación con servidor");

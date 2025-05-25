@@ -35,9 +35,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({
-    where: { email },
-  });
+  const user = await User.findOne({ where: { email } });
 
   if (!user) return res.status(401).send({ message: "Usuario no existente" });
 
@@ -48,28 +46,17 @@ export const loginUser = async (req, res) => {
 
   const secretKey = "programacion3-2025";
 
-  const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
-
-  return res.json(token);
-};
-
-export const loginAdmin = async (req, res) => {
-  const { email, password, role } = req.body;
-
-  const admin = await User.findOne({
-    where: { email, role: "admin" },
+  const token = jwt.sign({ email, role: user.role }, secretKey, {
+    expiresIn: "1h",
   });
 
-  if (!admin) return res.status(401).send({ message: "Usuario no existente" });
-
-  const comparison = await bcrypt.compare(password, admin.password);
-
-  if (!comparison)
-    return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
-
-  const secretKey = "programacion3-2025";
-
-  const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
-
-  return res.json(token);
+  return res.json({
+    token,
+    isAdmin: user.role === "admin",
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  });
 };

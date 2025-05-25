@@ -83,7 +83,7 @@ function App() {
               <LoginAdmin onLogin={handleLogin} setMessage={setMessage} />
             }
           />
-          <Route path="/servicios" element={<Servicios token={token} />} />
+          <Route path="/services" element={<Servicios token={token} />} />
           <Route
             path="/crear-servicio"
             element={

@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, Button, Dropdown } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { Person } from "react-bootstrap-icons";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { PersonFill } from "react-bootstrap-icons";
 import "./NavBar.css";
 
 function NavBar({ token, isAdmin, onLogout }) {
@@ -10,6 +10,13 @@ function NavBar({ token, isAdmin, onLogout }) {
     onLogout(); // limpia el token en App
     navigate("/"); // redirige al home
   };
+
+  const location = useLocation();
+  const aboutus = location.pathname === "/about-us";
+  const locations = location.pathname === "/locations";
+  const services = location.pathname === "/services";
+  const createservice = location.pathname === "/create-service";
+  const turns = location.pathname === "/turns";
 
   return (
     <Navbar expand="lg" className="barber-navbar bg-body-tertiary">
@@ -33,18 +40,45 @@ function NavBar({ token, isAdmin, onLogout }) {
           aria-controls="basic-navbar-nav"
         />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto d-flex flex-row align-items-center gap-3">
-            <Nav.Link as={Link} to="/servicios">
+          <Nav className="ms-auto d-flex flex-column flex-lg-row align-items-center gap-3">
+            <Nav.Link
+              as={Link}
+              className={aboutus ? "underlined" : ""}
+              to="/about-us"
+            >
               Sobre Nosotros
             </Nav.Link>
-            <Nav.Link as={Link} to="/locations">
+            <Nav.Link
+              as={Link}
+              className={locations ? "underlined" : ""}
+              to="/locations"
+            >
               Ubicaciones
             </Nav.Link>
-            <Nav.Link as={Link} to="/servicios">
+            <Nav.Link
+              as={Link}
+              className={services ? "underlined" : ""}
+              to="/services"
+            >
               Nuestros Servicios
             </Nav.Link>
+
+            {token && (
+              <Nav.Link
+                as={Link}
+                className={turns ? "underlined" : ""}
+                to="/turns"
+              >
+                Turnos
+              </Nav.Link>
+            )}
+
             {isAdmin && (
-              <Nav.Link as={Link} to="/crear-servicio">
+              <Nav.Link
+                as={Link}
+                className={createservice ? "underlined" : ""}
+                to="/create-service"
+              >
                 Crear Servicio
               </Nav.Link>
             )}
@@ -60,11 +94,15 @@ function NavBar({ token, isAdmin, onLogout }) {
             ) : (
               <Dropdown>
                 <Dropdown.Toggle className="navbar-button" id="dropdown-basic">
-                  <Person /> Mi Perfil
+                  <PersonFill /> Mi Perfil
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Mensajes</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Configuración</Dropdown.Item>
+                <Dropdown.Menu className="centered-menu">
+                  <Dropdown.Item href="/messages" className="drop-menu">
+                    Mensajes
+                  </Dropdown.Item>
+                  <Dropdown.Item href="/settings" className="drop-menu">
+                    Configuración
+                  </Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item
                     className="logout-button"
@@ -84,6 +122,3 @@ function NavBar({ token, isAdmin, onLogout }) {
 }
 
 export default NavBar;
-/*                              <Button className="navbar-button" onClick={handleLogout}>
-                  <Person /> Mi Perfil
-                </Button>*/
