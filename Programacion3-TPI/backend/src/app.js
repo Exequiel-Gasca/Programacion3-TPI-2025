@@ -1,10 +1,10 @@
 import express from "express";
 import { sequelize } from "./db.js";
 import { PORT } from "./config.js";
-import appointmentRoutes from "./routes/appointments.routes.js";
+import turnsRoutes from "./routes/turns.routes.js";
 import barberserviceRoutes from "./routes/barberservices.routes.js";
 import userRoutes from "./routes/user.routes.js";
-import "./models/Appointment.js";
+import "./models/Turns.js";
 import "./models/Barberservice.js";
 import "./models/User.js";
 
@@ -19,7 +19,7 @@ try {
     next();
   });
   app.listen(PORT);
-  app.use(appointmentRoutes);
+  app.use(turnsRoutes);
   app.use(userRoutes);
   app.use(barberserviceRoutes);
 

@@ -11,6 +11,7 @@ import Turns from "./components/content/turns/Turns";
 import Protected from "./components/auth/protected/Protected";
 import Locations from "./components/content/locations/Locations";
 import NotFound from "./components/content/notfound/NotFound";
+import Footer from "./components/ui/footer/Footer";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -95,6 +96,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer></Footer>
       </BrowserRouter>
     </div>
   );
