@@ -96,6 +96,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer></Footer>
       </BrowserRouter>
       <Footer />
     </div>
