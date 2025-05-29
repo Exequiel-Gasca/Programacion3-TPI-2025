@@ -7,8 +7,8 @@ function NavBar({ token, isAdmin, onLogout }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    onLogout(); // limpia el token en App
-    navigate("/"); // redirige al home
+    onLogout();
+    navigate("/");
   };
 
   const location = useLocation();

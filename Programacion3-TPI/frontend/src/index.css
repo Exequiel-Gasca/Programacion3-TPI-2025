@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: #e6d2b3;
-  background-color: #e6d2b3; /*242424*/
+  background-color: #e6d2b3;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,11 +13,40 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: "GloucesterMT-ExtraCondensed";
+  src: url("./assets/fonts/GloucesterMT-ExtraCondensed.ttf") format("truetype");
+}
+
+/* Reset */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: #e6d2b3;
 }
 
-@font-face {
-  font-family: "GloucesterMT-ExtraCondensed";
-  src: url("./assets/fonts/GloucesterMT-ExtraCondensed.ttf") format("truetype");
+/* Contenedor principal */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Área de contenido que crece */
+main {
+  flex: 1;
+}
+
+/* Footer fijo al fondo */
+footer {
+  flex-shrink: 0;
+  background-color: #242424;
+  color: #e6d2b3;
+  padding: 1rem;
 }

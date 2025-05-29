@@ -13,14 +13,14 @@
 
 #Ayuda {
   color: whitesmoke;
-  display: inline-block;
+
   border-bottom: 1px solid #c6ab80;
   padding-right: 5rem;
 }
 
 #Nuestras_Redes {
   color: whitesmoke;
-  display: inline-block;
+
   border-bottom: 1px solid #c6ab80;
   padding-right: 38rem;
 }
@@ -29,7 +29,6 @@ ul {
   list-style-type: none;
   color: whitesmoke;
 }
-
 
 footer {
   background-color: rgb(30, 30, 30);

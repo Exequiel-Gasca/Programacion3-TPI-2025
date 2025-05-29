@@ -212,7 +212,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <p>© 2025Barbershop. Todos los derechos reservados.</p>
+        <p>© 2025 Barbershop. Todos los derechos reservados.</p>
       </div>
     </footer>
   );

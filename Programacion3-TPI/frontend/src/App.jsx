@@ -50,53 +50,54 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="app-container">
       <BrowserRouter>
         <NavBar token={token} isAdmin={isAdmin} onLogout={handleLogout} />
         {message && (
           <div style={{ color: "red", textAlign: "center" }}>{message}</div>
         )}
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/locations" element={<Locations />} />
-          <Route
-            path="/register"
-            element={<Register setMessage={setMessage} />}
-          />
-          <Route
-            path="/login"
-            element={
-              <LoginUser onLogin={handleLogin} setMessage={setMessage} />
-            }
-          />
-          <Route
-            path="/turns"
-            element={
-              <Protected isSignedIn={!!token}>
-                <Turns />
-              </Protected>
-            }
-          />
-          <Route
-            path="/login/admin"
-            element={
-              <LoginAdmin onLogin={handleLogin} setMessage={setMessage} />
-            }
-          />
-          <Route path="/services" element={<Servicios token={token} />} />
-          <Route
-            path="/crear-servicio"
-            element={
-              <CreateService
-                token={token}
-                isAdmin={isAdmin}
-                setMessage={setMessage}
-              />
-            }
-          />
-        </Routes>
-        <Footer></Footer>
+        <main>
+          <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/locations" element={<Locations />} />
+            <Route
+              path="/register"
+              element={<Register setMessage={setMessage} />}
+            />
+            <Route
+              path="/login"
+              element={
+                <LoginUser onLogin={handleLogin} setMessage={setMessage} />
+              }
+            />
+            <Route
+              path="/turns"
+              element={
+                <Protected isSignedIn={!!token}>
+                  <Turns />
+                </Protected>
+              }
+            />
+            <Route
+              path="/login/admin"
+              element={
+                <LoginAdmin onLogin={handleLogin} setMessage={setMessage} />
+              }
+            />
+            <Route path="/services" element={<Servicios token={token} />} />
+            <Route
+              path="/crear-servicio"
+              element={
+                <CreateService
+                  token={token}
+                  isAdmin={isAdmin}
+                  setMessage={setMessage}
+                />
+              }
+            />
+          </Routes>
+        </main>
       </BrowserRouter>
       <Footer />
     </div>

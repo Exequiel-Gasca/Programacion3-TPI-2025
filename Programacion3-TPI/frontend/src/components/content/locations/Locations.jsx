@@ -1,14 +1,11 @@
-import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
-import Tab from "react-bootstrap/Tab";
+import { Col, Nav, Row, Tab } from "react-bootstrap";
 import "./Locations.css";
 
 const Locations = () => {
   return (
     <div>
       <Tab.Container id="left-tabs-example" defaultActiveKey="0">
-        <Row>
+        <Row className="g-0">
           <Col sm={3}>
             <h1 className="d-flex flex-column align-items-center m-3">
               Sucursales
@@ -41,52 +38,47 @@ const Locations = () => {
           <Col sm={9}>
             <Tab.Content>
               <Tab.Pane eventKey="0">
-                {" "}
-                <iframe
-                  width="100%"
-                  height="800"
-                  style={{ border: 0 }}
-                  loading="fast"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Rosario&zoom=13&maptype=roadmap`}
-                ></iframe>
+                <div className="map-responsive">
+                  <iframe
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Rosario&zoom=13&maptype=roadmap`}
+                    allowFullScreen
+                    loading="fast"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </Tab.Pane>
+
               <Tab.Pane eventKey="1">
-                {" "}
-                <iframe
-                  width="100%"
-                  height="800"
-                  style={{ border: 0 }}
-                  loading="fast"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=San%20Martin%20547&zoom=17&maptype=roadmap`}
-                ></iframe>
+                <div className="map-responsive">
+                  <iframe
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=San%20Martin%20547&zoom=17&maptype=roadmap`}
+                    allowFullScreen
+                    loading="fast"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </Tab.Pane>
+
               <Tab.Pane eventKey="2">
-                {" "}
-                <iframe
-                  width="100%"
-                  height="800"
-                  style={{ border: 1 }}
-                  loading="fast"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Salta%202834&zoom=17&maptype=roadmap`}
-                ></iframe>
+                <div className="map-responsive">
+                  <iframe
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Salta%202834&zoom=17&maptype=roadmap`}
+                    allowFullScreen
+                    loading="fast"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </Tab.Pane>
+
               <Tab.Pane eventKey="3">
-                {" "}
-                <iframe
-                  width="100%"
-                  height="800"
-                  style={{ border: 0 }}
-                  loading="fast"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=San%20Martin%205418&zoom=17&maptype=roadmap`}
-                ></iframe>
+                <div className="map-responsive">
+                  <iframe
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=San%20Martin%205418&zoom=17&maptype=roadmap`}
+                    allowFullScreen
+                    loading="fast"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </Tab.Pane>
             </Tab.Content>
           </Col>
