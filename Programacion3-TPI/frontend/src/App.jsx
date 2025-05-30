@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/ui/navbar/NavBar";
-import Register from "./components/Register";
-import LoginUser from "./components/LoginUser";
-import LoginAdmin from "./components/LoginAdmin";
-import Servicios from "./components/Servicios";
-import CreateService from "./components/CreateService";
+import Register from "./components/auth/register/Register";
+import Login from "./components/auth/login/Login";
+import Services from "./components/content/services/Services";
+import CreateService from "./components/content/createservice/CreateService";
 import Home from "./components/content/home/Home";
 import Turns from "./components/content/turns/Turns";
 import Protected from "./components/auth/protected/Protected";
@@ -17,10 +16,9 @@ function App() {
   const [token, setToken] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState("");
-  const [loggedIn, setLoggedin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleLogin = (token, isAdminFlag) => {
-    setLoggedin(true);
     setToken(token);
     setIsAdmin(isAdminFlag);
     localStorage.setItem("token", token);
@@ -30,7 +28,6 @@ function App() {
   const handleLogout = () => {
     setToken(null);
     setIsAdmin(false);
-    setLoggedin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("isAdmin");
   };
@@ -40,12 +37,13 @@ function App() {
       const savedToken = localStorage.getItem("token");
       if (savedToken) {
         setToken(savedToken);
-        setLoggedin(true);
         const savedIsAdmin = localStorage.getItem("isAdmin") === "true";
         setIsAdmin(savedIsAdmin);
       }
     } catch (error) {
       console.error("Error al recuperar datos de localStorage", error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -67,27 +65,28 @@ function App() {
             />
             <Route
               path="/login"
-              element={
-                <LoginUser onLogin={handleLogin} setMessage={setMessage} />
-              }
+              element={<Login onLogin={handleLogin} setMessage={setMessage} />}
             />
             <Route
               path="/turns"
               element={
-                <Protected isSignedIn={!!token}>
+                <Protected isSignedIn={token} isLoading={isLoading}>
                   <Turns />
                 </Protected>
               }
             />
             <Route
-              path="/login/admin"
+              path="/services"
               element={
-                <LoginAdmin onLogin={handleLogin} setMessage={setMessage} />
+                <Services
+                  token={token}
+                  isAdmin={isAdmin}
+                  isLoading={isLoading}
+                />
               }
             />
-            <Route path="/services" element={<Servicios token={token} />} />
             <Route
-              path="/crear-servicio"
+              path="/create-service"
               element={
                 <CreateService
                   token={token}

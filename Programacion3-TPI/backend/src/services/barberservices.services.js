@@ -31,3 +31,28 @@ export const listServices = async (req, res) => {
   const services = await Barberservice.findAll();
   res.json(services);
 };
+
+export const deleteService = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).send({ message: "Token faltante" });
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    if (decoded.role !== "admin") {
+      return res
+        .status(403)
+        .send({ message: "No tenés permisos para borrar servicios" });
+    }
+
+    const { id } = req.params;
+    const deleted = await Barberservice.destroy({ where: { id } });
+
+    if (deleted) {
+      res.send({ message: "Servicio eliminado" });
+    } else {
+      res.status(404).send({ message: "Servicio no encontrado" });
+    }
+  } catch (err) {
+    res.status(401).send({ message: "Token inválido" });
+  }
+};

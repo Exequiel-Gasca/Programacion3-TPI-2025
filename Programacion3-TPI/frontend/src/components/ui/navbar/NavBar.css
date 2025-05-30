@@ -22,6 +22,12 @@
   border: #2b211e 3px solid !important;
   color: #f5f5dc !important;
 }
+.navbar-button:active {
+  border: #2b211e 3px solid !important;
+  background-color: #745348 !important;
+  color: #f5f5dc !important;
+  box-sizing: border-box;
+}
 
 .dropdown.show .navbar-button {
   background-color: #56382e !important;

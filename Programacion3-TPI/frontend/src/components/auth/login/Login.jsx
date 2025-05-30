@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function LoginUser({ onLogin, setMessage }) {
+function Login({ onLogin, setMessage }) {
   const [form, setForm] = useState({});
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function LoginUser({ onLogin, setMessage }) {
       if (!res.ok) {
         setMessage(data.message || "Error en login");
       } else {
-        onLogin(data, data.isAdmin);
+        onLogin(data.token, data.isAdmin);
         navigate("/turns");
       }
     } catch {
@@ -51,4 +51,4 @@ function LoginUser({ onLogin, setMessage }) {
   );
 }
 
-export default LoginUser;
+export default Login;

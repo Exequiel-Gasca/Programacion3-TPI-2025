@@ -11,14 +11,17 @@ function CreateService({ token, onCreated }) {
     e.preventDefault();
     setMessage("");
     try {
-      const res = await fetch("http://localhost:3000/nuestrosservicios", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        "http://localhost:3000/api/barberservices/nuestrosservicios",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(form),
+        }
+      );
       if (!res.ok) {
         const err = await res.json();
         setMessage(err.message || "Error creando servicio");
@@ -37,7 +40,7 @@ function CreateService({ token, onCreated }) {
       <h2>Crear Servicio</h2>
       {message && <p style={{ color: "red" }}>{message}</p>}
       <input
-        name="name"
+        name="serviceType"
         placeholder="Nombre Servicio"
         required
         onChange={handleChange}

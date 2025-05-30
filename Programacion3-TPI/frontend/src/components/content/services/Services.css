@@ -1,0 +1,20 @@
+.delete-button {
+  background-color: #56382e;
+  color: #f5f5dc !important;
+  border: #2b211e 3px solid;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.delete-button:hover {
+  border: #2b211e 3px solid;
+  background-color: #745348;
+  color: #f5f5dc !important;
+  box-sizing: border-box;
+}
+.delete-button:active {
+  border: #2b211e 3px solid !important;
+  background-color: #745348 !important;
+  color: #f5f5dc !important;
+  box-sizing: border-box;
+}

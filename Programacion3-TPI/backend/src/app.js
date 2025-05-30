@@ -21,7 +21,7 @@ try {
   app.listen(PORT);
   app.use(turnsRoutes);
   app.use(userRoutes);
-  app.use(barberserviceRoutes);
+  app.use("/api/barberservices", barberserviceRoutes);
 
   await sequelize.sync();
 
