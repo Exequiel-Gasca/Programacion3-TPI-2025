@@ -18,7 +18,6 @@
   src: url("./assets/fonts/GloucesterMT-ExtraCondensed.ttf") format("truetype");
 }
 
-/* Reset */
 html,
 body,
 #root {
@@ -31,22 +30,59 @@ body {
   background-color: #e6d2b3;
 }
 
-/* Contenedor principal */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Área de contenido que crece */
 main {
   flex: 1;
 }
 
-/* Footer fijo al fondo */
 footer {
   flex-shrink: 0;
   background-color: #242424;
   color: #e6d2b3;
   padding: 1rem;
+}
+
+.form-container {
+  background-color: #a3795b !important;
+  color: #f5f5dc !important;
+  border: #2b211e solid 3px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 22px;
+  padding: 15px;
+}
+
+.form-control-custom {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.button-custom {
+  background-color: #56382e !important;
+  color: #f5f5dc !important;
+  border: #2b211e solid 3px;
+}
+.button-custom:hover {
+  background-color: #745348 !important;
+  border: #2b211e 3px solid !important;
+  color: #f5f5dc !important;
+}
+.button-custom:active {
+  border: #2b211e 3px solid !important;
+  background-color: #745348 !important;
+  color: #f5f5dc !important;
+  box-sizing: border-box;
+}
+
+.register-button {
+  color: #2b211e;
+}
+.register-button:hover {
+  color: #56382e;
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 
 function Login({ onLogin, setMessage }) {
   const [form, setForm] = useState({});
@@ -30,24 +31,39 @@ function Login({ onLogin, setMessage }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login Usuario</h2>
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        required
-        onChange={handleChange}
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Contraseña"
-        required
-        onChange={handleChange}
-      />
-      <button type="submit">Entrar</button>
-    </form>
+    <div className="d-flex flex-column align-items-center justify-content-center text-center">
+      <h2 style={{ color: "#56382E" }}>Iniciar Sesión</h2>
+
+      <Form className="form-container" onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label style={{ fontWeight: 500 }}>Email</Form.Label>
+          <Form.Control
+            className="form-control-custom"
+            name="email"
+            type="email"
+            placeholder="email@example.com"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="form mb-3">
+          <Form.Label style={{ fontWeight: 500 }}>Contraseña</Form.Label>
+          <Form.Control
+            className="form-control-custom"
+            name="password"
+            type="password"
+            placeholder="*******"
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Button className="button-custom" type="submit">
+          Iniciar Sesión
+        </Button>
+        <Button className="register-button" variant="link" href="/register">
+          ¿No tenes usuario? Registrate acá
+        </Button>
+      </Form>
+    </div>
   );
 }
 

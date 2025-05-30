@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { X } from "react-bootstrap-icons";
+import { Alert, ListGroup } from "react-bootstrap";
+import { XSquareFill } from "react-bootstrap-icons";
 import "./Services.css";
 
 const Services = ({ token, isAdmin }) => {
   const [servicios, setServicios] = useState([]);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const obtenerServicios = async () => {
@@ -37,7 +38,7 @@ const Services = ({ token, isAdmin }) => {
     obtenerServicios();
   }, [token]);
 
-  const deleteHandler = async (id) => {
+  const deleteHandler = async (id, nombre) => {
     try {
       const res = await fetch(
         `http://localhost:3000/api/barberservices/nuestrosservicios/${id}`,
@@ -58,28 +59,57 @@ const Services = ({ token, isAdmin }) => {
       }
 
       setServicios(servicios.filter((s) => s.id !== id));
+      setSuccessMessage(`Se eliminó correctamente el servicio ${nombre}`);
     } catch {
       alert("Error al comunicarse con el servidor");
     }
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   return (
-    <div>
-      <h2>Servicios disponibles</h2>
+    <div className="d-flex flex-column align-items-center justify-content-center text-center">
+      <h2 style={{ color: "#56382E" }}>Servicios disponibles</h2>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
+
+      {successMessage && (
+        <Alert
+          variant="success"
+          onClose={() => setSuccessMessage("")}
+          dismissible
+          style={{
+            position: "fixed",
+            zIndex: 9999,
+          }}
+        >
+          {successMessage}
+        </Alert>
+      )}
+
+      <ListGroup className="service-container">
         {servicios.map((servicio) => (
-          <li key={servicio.id}>
-            {servicio.serviceType} - ${servicio.price}
+          <ListGroup.Item
+            className="service-item d-flex align-items-center"
+            key={servicio.id}
+          >
+            <span style={{ marginRight: "150px" }}>
+              {servicio.serviceType} - ${servicio.price}
+            </span>
             {isAdmin && (
-              <X
-                style={{ color: "red" }}
-                onClick={() => deleteHandler(servicio.id)}
+              <XSquareFill
+                className="delete-button"
+                onClick={() => deleteHandler(servicio.id, servicio.serviceType)}
               />
             )}
-          </li>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };

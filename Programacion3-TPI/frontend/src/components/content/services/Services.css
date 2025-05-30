@@ -1,20 +1,28 @@
 .delete-button {
-  background-color: #56382e;
-  color: #f5f5dc !important;
-  border: #2b211e 3px solid;
-  box-sizing: border-box;
-  border-radius: 10px;
+  color: #b02a37;
+  cursor: pointer;
+  margin-left: auto;
 }
 
 .delete-button:hover {
-  border: #2b211e 3px solid;
-  background-color: #745348;
-  color: #f5f5dc !important;
-  box-sizing: border-box;
+  color: #be4551;
+  cursor: pointer;
+  margin-left: auto;
 }
-.delete-button:active {
-  border: #2b211e 3px solid !important;
-  background-color: #745348 !important;
+
+.service-container {
+  background-color: #56382e !important;
+  border: #2b211e 3px solid;
+}
+
+.service-item {
+  background-color: #56382e !important;
   color: #f5f5dc !important;
-  box-sizing: border-box;
+  border: #2b211e;
+  border-bottom: #2b211e solid;
+  font-weight: 500;
+}
+
+.service-item:last-child {
+  border-bottom: none;
 }
