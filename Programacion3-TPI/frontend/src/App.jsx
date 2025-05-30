@@ -11,6 +11,7 @@ import Protected from "./components/auth/protected/Protected";
 import Locations from "./components/content/locations/Locations";
 import NotFound from "./components/content/notfound/NotFound";
 import Footer from "./components/ui/footer/Footer";
+import AboutUs from "./components/content/aboutus/AboutUs";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -58,6 +59,7 @@ function App() {
           <Routes>
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
+            <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
             <Route
               path="/register"
