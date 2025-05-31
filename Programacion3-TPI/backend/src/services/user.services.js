@@ -71,6 +71,7 @@ export const loginUser = async (req, res) => {
 
 export const deleteUserAccount = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
+  console.log("Token recibido:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Token faltante" });
@@ -78,18 +79,19 @@ export const deleteUserAccount = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, secretKey);
+    console.log("Token decodificado:", decoded);
+
     const email = decoded.email;
 
     const user = await User.findOne({ where: { email } });
-
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
     await user.destroy();
-
     return res.status(200).json({ message: "Cuenta eliminada con éxito" });
   } catch (error) {
+    console.error("Error JWT:", error);
     return res.status(401).json({ message: "Token inválido o expirado" });
   }
 };
