@@ -43,3 +43,29 @@ p {
   display: flex;
   justify-content: center;
 }
+#instagram {
+  position: relative;
+  bottom: 0.3rem;
+}
+#mail {
+  position: relative;
+  bottom: 0.2rem;
+}
+
+#telefono_fijo {
+  position: relative;
+  bottom: 0.2rem;
+}
+
+#whatsapp {
+  position: relative;
+  bottom: 0.1rem;
+}
+#facebook {
+  position: relative;
+  bottom: 0.2rem;
+}
+#github {
+  position: relative;
+  bottom: 0.2rem;
+}

@@ -12,14 +12,13 @@ const Footer = () => {
             </h3>
             <ul>
               <li>Preguntas Frecuentes</li>
-              <li>Soporte</li>
             </ul>
           </div>
           <div className="col-9">
             <h3 className="ms-4" id="Nuestras_Redes">
               Nuestras Redes
             </h3>
-            <ul>
+            <ul className="Redes">
               <div className="row">
                 <li className="col-4">
                   <svg
@@ -48,7 +47,7 @@ const Footer = () => {
                       ></path>{" "}
                     </g>
                   </svg>{" "}
-                  <span>528 4813</span>
+                  <span id="telefono_fijo">528 4813</span>
                 </li>
                 <li className="col-4">
                   <svg
@@ -95,7 +94,7 @@ const Footer = () => {
                       </g>{" "}
                     </g>
                   </svg>
-                  <span>@barbershopros</span>
+                  <span id="instagram">@barbershopros</span>
                 </li>
                 <li className="col-4">
                   <svg
@@ -119,7 +118,7 @@ const Footer = () => {
                       ></path>{" "}
                     </g>
                   </svg>
-                  <span>barbershopros@gmail.com</span>
+                  <span id="mail">barbershopros@gmail.com</span>
                 </li>
               </div>
               <div className="row">
@@ -149,7 +148,7 @@ const Footer = () => {
                       ></path>{" "}
                     </g>
                   </svg>
-                  <span>+54 9 341 335 9098</span>
+                  <span id="whatsapp">+54 9 341 335 9098</span>
                 </li>
                 <li className="col-4">
                   <svg
@@ -173,7 +172,7 @@ const Footer = () => {
                       ></path>{" "}
                     </g>
                   </svg>
-                  <span>barbershopros</span>
+                  <span id="facebook">barbershopros</span>
                 </li>
                 <li className="col-4">
                   <a
@@ -205,7 +204,7 @@ const Footer = () => {
                         ></path>{" "}
                       </g>{" "}
                     </svg>
-                    <span>Github</span>
+                    <span id="github">Github</span>
                   </a>
                 </li>
               </div>

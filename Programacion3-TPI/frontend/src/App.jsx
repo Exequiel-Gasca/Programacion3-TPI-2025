@@ -12,8 +12,8 @@ import Locations from "./components/content/locations/Locations";
 import NotFound from "./components/content/notfound/NotFound";
 import Footer from "./components/ui/footer/Footer";
 import AboutUs from "./components/content/aboutus/AboutUs";
-import Soporte from "./components/content/soporte/Soporte";
-import PreguntasFrecuentes from "./components/content/preguntasfrecuentes/PreguntasFrecuentes";
+import PreguntasFrecuentes from "./components/content/Faq/Faq";
+import Faq from "./components/content/Faq/Faq";
 function App() {
   const [token, setToken] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -62,11 +62,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
-            <Route path="/soporte" element={<Soporte />} />
-            <Route
-              path="/preguntasfrecuentes"
-              element={<PreguntasFrecuentes />}
-            />
+            <Route path="/Faq" element={<Faq />} />
             <Route
               path="/register"
               element={<Register setMessage={setMessage} />}
