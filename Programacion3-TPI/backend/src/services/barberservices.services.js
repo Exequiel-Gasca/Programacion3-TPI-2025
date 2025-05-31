@@ -28,8 +28,32 @@ export const createServices = async (req, res) => {
 };
 
 export const listServices = async (req, res) => {
-  const services = await Barberservice.findAll();
-  res.json(services);
+  try {
+    const services = await Barberservice.findAll();
+    res.json(services);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener servicios" });
+  }
+};
+
+export const deleteService = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const service = await Barberservice.findByPk(id);
+
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    await service.destroy();
+    return res.status(200).json({ message: "Servicio eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar el servicio:", error);
+    return res
+      .status(500)
+      .json({ message: "Error interno al eliminar el servicio" });
+  }
 };
 
 export const deleteService = async (req, res) => {
