@@ -1,5 +1,5 @@
-import "./Faq.css";
-const Faq = () => {
+import "./FAQ.css";
+const FAQ = () => {
   return (
     <div className="faq">
       <h2>Preguntas Frecuentes</h2>
@@ -14,9 +14,8 @@ const Faq = () => {
       <div className="pregunta">
         <h3>¿Qué servicios ofrecen?</h3>
         <p>
-          Ofrecemos cortes de cabello para mujeres, hombres y adolescentes,
-          coloración, tratamientos capilares, alisados, peinados para eventos,
-          barbería y más.
+          Podes encontrar los servicios que ofrecemos en el momento en la
+          sección Nuestros Servicios
         </p>
       </div>
       <div className="pregunta">
@@ -42,14 +41,6 @@ const Faq = () => {
         </p>
       </div>
       <div className="pregunta">
-        <h3>¿Tienen servicios especiales para eventos?</h3>
-        <p>
-          Sí, ofrecemos servicios de peinados, maquillaje y asesoramiento para
-          casamientos, cumpleaños de 15 y otros eventos. Podés consultarnos para
-          armar un paquete personalizado.
-        </p>
-      </div>
-      <div className="pregunta">
         <h3>¿Utilizan productos veganos o cruelty-free?</h3>
         <p>
           Sí, trabajamos con marcas que no testean en animales y ofrecemos
@@ -67,4 +58,4 @@ const Faq = () => {
   );
 };
 
-export default Faq;
+export default FAQ;

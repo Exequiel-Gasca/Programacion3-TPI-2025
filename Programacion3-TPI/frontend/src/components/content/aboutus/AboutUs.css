@@ -1,5 +1,4 @@
 .aboutUs {
-  background-color: #e6d2b3;
   padding: 4rem 2rem;
 }
 
@@ -17,13 +16,6 @@
   align-items: center;
 }
 
-.imagen-aboutUs {
-  max-width: 400px;
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #000;
-}
-
 .texto-aboutUs {
   max-width: 600px;
   font-size: 1.1rem;
@@ -31,5 +23,5 @@
 }
 
 .texto-aboutUs p {
-  color: #56382e;
+  color: #472a28;
 }

@@ -1,3 +1,14 @@
+.edit-button {
+  color: #2ab04c;
+  cursor: pointer;
+  margin-left: auto;
+}
+.edit-button:hover {
+  color: #80dd97;
+  cursor: pointer;
+  margin-left: auto;
+}
+
 .delete-button {
   color: #b02a37;
   cursor: pointer;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Alert, ListGroup } from "react-bootstrap";
-import { XSquareFill } from "react-bootstrap-icons";
+import { Alert, ListGroup, Modal, Button, Form } from "react-bootstrap";
+import { XSquareFill, PencilSquare } from "react-bootstrap-icons";
 import "./Services.css";
 
 const Services = ({ token, isAdmin }) => {
@@ -74,7 +74,7 @@ const Services = ({ token, isAdmin }) => {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center text-center">
-      <h2 style={{ color: "#56382E" }}>Servicios disponibles</h2>
+      <h2 className="section-title">Servicios disponibles</h2>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -85,6 +85,7 @@ const Services = ({ token, isAdmin }) => {
           dismissible
           style={{
             position: "fixed",
+            top: "110px",
             zIndex: 9999,
           }}
         >
@@ -102,10 +103,18 @@ const Services = ({ token, isAdmin }) => {
               {servicio.serviceType} - ${servicio.price}
             </span>
             {isAdmin && (
-              <XSquareFill
-                className="delete-button"
-                onClick={() => deleteHandler(servicio.id, servicio.serviceType)}
-              />
+              <span className="ms-auto d-flex gap-2">
+                <PencilSquare
+                  className="edit-button"
+                  onClick={() => openEditModal(servicio)}
+                />
+                <XSquareFill
+                  className="delete-button"
+                  onClick={() =>
+                    deleteHandler(servicio.id, servicio.serviceType)
+                  }
+                />
+              </span>
             )}
           </ListGroup.Item>
         ))}

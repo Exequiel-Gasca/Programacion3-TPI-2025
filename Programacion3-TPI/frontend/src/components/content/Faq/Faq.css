@@ -1,8 +1,7 @@
 .faq {
-  background-color: rgb(30, 30, 30);
   padding: 2rem;
   border-radius: 8px;
-  color: whitesmoke;
+  color: #745348;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -11,8 +10,8 @@
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2rem;
-  color: #c6ab80;
-  border-bottom: 1px solid #c6ab80;
+  color: #56382e;
+  border-bottom: 1px solid #56382e;
   padding-bottom: 0.5rem;
 }
 
@@ -25,14 +24,14 @@
 
 .pregunta > h3 {
   font-size: 1.2rem;
-  color: #c6ab80;
+  color: #56382e;
   margin-bottom: 0.5rem;
 }
 
 .pregunta > p {
   font-size: 1rem;
   line-height: 1.6;
-  color: whitesmoke;
+  color: #745348;
   margin: 0;
   padding-left: 0;
 }
