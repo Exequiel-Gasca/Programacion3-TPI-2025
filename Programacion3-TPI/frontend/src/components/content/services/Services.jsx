@@ -6,7 +6,11 @@ import "./Services.css";
 const Services = ({ token, isAdmin }) => {
   const [servicios, setServicios] = useState([]);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [editingService, setEditingService] = useState(null);
+  const [editForm, setEditForm] = useState({ serviceType: "", price: "" });
 
   useEffect(() => {
     const obtenerServicios = async () => {
@@ -59,18 +63,58 @@ const Services = ({ token, isAdmin }) => {
       }
 
       setServicios(servicios.filter((s) => s.id !== id));
-      setSuccessMessage(`Se eliminó correctamente el servicio ${nombre}`);
+      setMessage(`Se eliminó correctamente el servicio ${nombre}`);
     } catch {
       alert("Error al comunicarse con el servidor");
     }
   };
 
+  const editHandler = (servicio) => {
+    setEditingService(servicio);
+    setEditForm({ serviceType: servicio.serviceType, price: servicio.price });
+    setShowModal(true);
+  };
+
+  const editChangeHandler = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
+  };
+
+  const editSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/barberservices/nuestrosservicios/${editingService.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(editForm),
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Error al editar");
+
+      setMessage("Servicio editado correctamente");
+      setShowModal(false);
+      setServicios((prev) =>
+        prev.map((s) =>
+          s.id === editingService.id ? { ...s, ...editForm } : s
+        )
+      );
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
       return () => clearTimeout(timer);
     }
-  }, [successMessage]);
+  }, [message]);
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center text-center">
@@ -78,10 +122,10 @@ const Services = ({ token, isAdmin }) => {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {successMessage && (
+      {message && (
         <Alert
           variant="success"
-          onClose={() => setSuccessMessage("")}
+          onClose={() => setMessage("")}
           dismissible
           style={{
             position: "fixed",
@@ -89,7 +133,7 @@ const Services = ({ token, isAdmin }) => {
             zIndex: 9999,
           }}
         >
-          {successMessage}
+          {message}
         </Alert>
       )}
 
@@ -106,7 +150,7 @@ const Services = ({ token, isAdmin }) => {
               <span className="ms-auto d-flex gap-2">
                 <PencilSquare
                   className="edit-button"
-                  onClick={() => openEditModal(servicio)}
+                  onClick={() => editHandler(servicio)}
                 />
                 <XSquareFill
                   className="delete-button"
@@ -119,6 +163,58 @@ const Services = ({ token, isAdmin }) => {
           </ListGroup.Item>
         ))}
       </ListGroup>
+
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        dialogClassName="edit-modal-dialog"
+        contentClassName="edit-modal-content"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="edit-modal-title">
+            Editar Servicio
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={editSubmitHandler}>
+            <Form.Group className="mb-3">
+              <Form.Label className="edit-modal-label">
+                Nombre del servicio
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="serviceType"
+                value={editForm.serviceType}
+                onChange={editChangeHandler}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className="edit-modal-label">Precio</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={editForm.price}
+                onChange={editChangeHandler}
+                step="0.01"
+                required
+              />
+            </Form.Group>
+            <div className="d-flex justify-content-end">
+              <Button
+                onClick={() => setShowModal(false)}
+                className="button-cancel me-2"
+              >
+                Cancelar
+              </Button>
+              <Button className="button-custom" type="submit">
+                Guardar cambios
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

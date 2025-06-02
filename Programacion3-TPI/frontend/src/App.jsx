@@ -13,6 +13,8 @@ import NotFound from "./components/content/notfound/NotFound";
 import Footer from "./components/ui/footer/Footer";
 import AboutUs from "./components/content/aboutus/AboutUs";
 import FAQ from "./components/content/FAQ/FAQ";
+import Settings from "./components/content/settings/Settings";
+
 function App() {
   const [token, setToken] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -61,7 +63,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
-            <Route path="/FAQ" element={<FAQ />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/settings" element={<Protected isSignedIn={token} isLoading={isLoading}> <Settings /></Protected>} />
             <Route
               path="/register"
               element={<Register setMessage={setMessage} />}

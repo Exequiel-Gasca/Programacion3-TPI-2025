@@ -62,6 +62,7 @@ footer {
 .form-control-custom {
   width: 75%;
   margin: 0 auto;
+  background-color: #f5f5dc;
 }
 
 .button-custom {

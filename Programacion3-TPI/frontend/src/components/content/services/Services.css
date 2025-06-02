@@ -37,3 +37,39 @@
 .service-item:last-child {
   border-bottom: none;
 }
+
+.edit-modal-dialog {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.edit-modal-content {
+  background-color: #a3795b !important;
+  border: 3px solid #2b211e;
+  border-radius: 22px;
+  padding: 15px;
+  margin-bottom: 35px;
+}
+
+.edit-modal-title,
+.edit-modal-label {
+  color: #f5f5dc !important;
+}
+
+.edit-modal-content .form-control {
+  background-color: #f5f5dc;
+  color: #2b211e;
+  border: 1px solid #2b211e;
+}
+
+.button-cancel {
+  border: #2b211e 3px solid !important;
+  background-color: #b02a37;
+  color: #f5f5dc;
+}
+
+.button-cancel:hover {
+  border: #2b211e 3px solid !important;
+  background-color: #be4551;
+  color: #f5f5dc;
+}

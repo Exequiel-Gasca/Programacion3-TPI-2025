@@ -94,12 +94,9 @@ function NavBar({ token, isAdmin, onLogout }) {
             ) : (
               <Dropdown>
                 <Dropdown.Toggle className="navbar-button" id="dropdown-basic">
-                  <PersonFill /> Mi Perfil
+                  <PersonFill /> Mi Cuenta
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="centered-menu">
-                  <Dropdown.Item href="/messages" className="drop-menu">
-                    Mensajes
-                  </Dropdown.Item>
                   <Dropdown.Item href="/settings" className="drop-menu">
                     Configuración
                   </Dropdown.Item>
