@@ -20,7 +20,7 @@ function Register() {
   };
 
   const validateNroTel = (nroTel) => {
-    return /\d{10}$/.test(nroTel);
+    return /^\d{10}$/.test(nroTel);
   };
 
   const handleSubmit = async (e) => {

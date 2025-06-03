@@ -17,6 +17,16 @@ export const createTurn = async (req, res) => {
 
     const { date, time, barberserviceId } = req.body;
 
+    const existingTurn = await Turns.findOne({
+      where: { date, time },
+    });
+
+    if (existingTurn) {
+      return res.status(400).json({
+        message: "Ya hay un turno reservado en esa fecha y hora",
+      });
+    }
+
     const newTurn = await Turns.create({
       date,
       time,

@@ -29,17 +29,14 @@ function CreateService({ token, onCreated }) {
     }
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/barberservices/nuestrosservicios",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const res = await fetch("http://localhost:3000/nuestrosservicios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
 
       const data = await res.json();
 

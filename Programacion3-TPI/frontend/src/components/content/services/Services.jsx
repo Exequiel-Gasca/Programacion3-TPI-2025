@@ -16,7 +16,7 @@ const Services = ({ token, isAdmin }) => {
     const obtenerServicios = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/barberservices/nuestrosservicios",
+          "http://localhost:3000/nuestrosservicios",
           {
             method: "GET",
             headers: {
@@ -44,16 +44,13 @@ const Services = ({ token, isAdmin }) => {
 
   const deleteHandler = async (id, nombre) => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/barberservices/nuestrosservicios/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:3000/nuestrosservicios/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
 
@@ -83,7 +80,7 @@ const Services = ({ token, isAdmin }) => {
     e.preventDefault();
     try {
       const res = await fetch(
-        `http://localhost:3000/api/barberservices/nuestrosservicios/${editingService.id}`,
+        `http://localhost:3000/nuestrosservicios/${editingService.id}`,
         {
           method: "PUT",
           headers: {

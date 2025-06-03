@@ -9,6 +9,7 @@ const Barberservice = sequelize.define("Barberservice", {
   },
   serviceType: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false,
   },
   price: {
