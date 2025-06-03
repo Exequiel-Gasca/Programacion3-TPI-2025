@@ -23,7 +23,7 @@ const Turns = sequelize.define("Turns", {
     },
   },
   time: {
-    type: DataTypes.TIME,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
