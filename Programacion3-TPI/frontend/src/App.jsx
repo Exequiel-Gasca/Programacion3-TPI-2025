@@ -64,7 +64,15 @@ function App() {
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/settings" element={<Protected isSignedIn={token} isLoading={isLoading}> <Settings /></Protected>} />
+            <Route
+              path="/settings"
+              element={
+                <Protected isSignedIn={token} isLoading={isLoading}>
+                  {" "}
+                  <Settings />
+                </Protected>
+              }
+            />
             <Route
               path="/register"
               element={<Register setMessage={setMessage} />}

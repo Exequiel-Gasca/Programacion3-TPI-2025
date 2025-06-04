@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const [user, setUser] = useState(null);
@@ -9,12 +10,18 @@ const Settings = () => {
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
+
+  const handleOpenDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -71,6 +78,45 @@ const Settings = () => {
       setVariant("success");
       setMessage(`Campo ${etiquetas[editField] || editField} actualizado`);
       setShowEditModal(false);
+    } catch (err) {
+      setVariant("danger");
+      setMessage(err.message);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:3000/me", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        let errorMessage = "Error al eliminar la cuenta";
+        try {
+          const data = await res.json();
+          if (data.message) errorMessage = data.message;
+        } catch {
+          errorMessage = res.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
+      }
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("isAdmin");
+      localStorage.removeItem("loggedIn");
+
+      setVariant("success");
+      setMessage("Cuenta eliminada correctamente");
+      setShowDeleteModal(false);
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
       setVariant("danger");
       setMessage(err.message);
@@ -220,6 +266,9 @@ const Settings = () => {
             />
           </p>
         </div>
+        <Button className="button-cancel mt-4" onClick={handleOpenDeleteModal}>
+          Eliminar cuenta
+        </Button>
       </div>
 
       <Modal
@@ -324,6 +373,35 @@ const Settings = () => {
             </div>
           </Form>
         </Modal.Body>
+      </Modal>
+
+      <Modal
+        dialogClassName="edit-modal-dialog"
+        contentClassName="edit-modal-content"
+        show={showDeleteModal}
+        onHide={handleCloseDeleteModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="edit-modal-title">
+            Confirmar eliminación
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="edit-modal-label">
+          ¿Estás seguro de que querés eliminar tu cuenta? Esta acción no se
+          puede deshacer.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button className="button-cancel" onClick={handleDeleteAccount}>
+            Eliminar cuenta
+          </Button>
+          <Button
+            className="button-custom me-2"
+            onClick={handleCloseDeleteModal}
+          >
+            Cancelar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
