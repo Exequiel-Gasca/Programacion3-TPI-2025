@@ -110,7 +110,7 @@ function Login({ onLogin }) {
             className="form-control-custom"
             name="password"
             type="password"
-            placeholder="*******"
+            placeholder="********"
             onChange={handleChange}
             value={form.password || ""}
           />

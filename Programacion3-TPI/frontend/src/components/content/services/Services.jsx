@@ -5,10 +5,9 @@ import "./Services.css";
 
 const Services = ({ token, isAdmin }) => {
   const [servicios, setServicios] = useState([]);
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-
   const [showModal, setShowModal] = useState(false);
+  const [variant, setVariant] = useState("danger");
   const [editingService, setEditingService] = useState(null);
   const [editForm, setEditForm] = useState({ serviceType: "", price: "" });
 
@@ -28,14 +27,16 @@ const Services = ({ token, isAdmin }) => {
 
         if (!response.ok) {
           const data = await response.json();
-          setError(data.message || "Error al obtener servicios");
+          setVariant("danger");
+          setMessage(data.message || "Error al obtener servicios");
           return;
         }
 
         const data = await response.json();
         setServicios(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError("No se pudo conectar con el servidor");
+        setVariant("danger");
+        setMessage("No se pudo conectar con el servidor");
       }
     };
 
@@ -60,9 +61,11 @@ const Services = ({ token, isAdmin }) => {
       }
 
       setServicios(servicios.filter((s) => s.id !== id));
+      setVariant("success");
       setMessage(`Se eliminó correctamente el servicio ${nombre}`);
     } catch {
-      alert("Error al comunicarse con el servidor");
+      setVariant("danger");
+      setMessage("Error al comunicarse con el servidor");
     }
   };
 
@@ -75,9 +78,22 @@ const Services = ({ token, isAdmin }) => {
   const editChangeHandler = (e) => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
-
   const editSubmitHandler = async (e) => {
     e.preventDefault();
+
+    const nombreNuevo = editForm.serviceType.trim().toLowerCase();
+    const nombreRepetido = servicios.some(
+      (s) =>
+        s.id !== editingService.id &&
+        s.serviceType.trim().toLowerCase() === nombreNuevo
+    );
+
+    if (nombreRepetido) {
+      setVariant("danger");
+      setMessage("Ya existe otro servicio con ese nombre.");
+      return;
+    }
+
     try {
       const res = await fetch(
         `http://localhost:3000/nuestrosservicios/${editingService.id}`,
@@ -94,6 +110,7 @@ const Services = ({ token, isAdmin }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Error al editar");
 
+      setVariant("success");
       setMessage("Servicio editado correctamente");
       setShowModal(false);
       setServicios((prev) =>
@@ -117,11 +134,10 @@ const Services = ({ token, isAdmin }) => {
     <div className="d-flex flex-column align-items-center justify-content-center text-center">
       <h2 className="section-title">Servicios disponibles</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
       {message && (
         <Alert
-          variant="success"
+          variant={variant}
+          className="w-75"
           onClose={() => setMessage("")}
           dismissible
           style={{
@@ -134,32 +150,36 @@ const Services = ({ token, isAdmin }) => {
         </Alert>
       )}
 
-      <ListGroup className="service-container">
-        {servicios.map((servicio) => (
-          <ListGroup.Item
-            className="service-item d-flex align-items-center"
-            key={servicio.id}
-          >
-            <span style={{ marginRight: "150px" }}>
-              {servicio.serviceType} - ${servicio.price}
-            </span>
-            {isAdmin && (
-              <span className="ms-auto d-flex gap-2">
-                <PencilSquare
-                  className="edit-button"
-                  onClick={() => editHandler(servicio)}
-                />
-                <XSquareFill
-                  className="delete-button"
-                  onClick={() =>
-                    deleteHandler(servicio.id, servicio.serviceType)
-                  }
-                />
+      {servicios.length === 0 ? (
+        <p className="mt-4 text-muted">No hay servicios disponibles</p>
+      ) : (
+        <ListGroup className="service-container">
+          {servicios.map((servicio) => (
+            <ListGroup.Item
+              className="service-item d-flex align-items-center"
+              key={servicio.id}
+            >
+              <span style={{ marginRight: "150px" }}>
+                {servicio.serviceType} - ${servicio.price}
               </span>
-            )}
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+              {isAdmin && (
+                <span className="ms-auto d-flex gap-2">
+                  <PencilSquare
+                    className="edit-button"
+                    onClick={() => editHandler(servicio)}
+                  />
+                  <XSquareFill
+                    className="delete-button"
+                    onClick={() =>
+                      deleteHandler(servicio.id, servicio.serviceType)
+                    }
+                  />
+                </span>
+              )}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
 
       <Modal
         show={showModal}
@@ -184,7 +204,6 @@ const Services = ({ token, isAdmin }) => {
                 name="serviceType"
                 value={editForm.serviceType}
                 onChange={editChangeHandler}
-                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -195,7 +214,6 @@ const Services = ({ token, isAdmin }) => {
                 value={editForm.price}
                 onChange={editChangeHandler}
                 step="0.01"
-                required
               />
             </Form.Group>
             <div className="d-flex justify-content-end">

@@ -60,7 +60,7 @@ export const listTurns = async (req, res) => {
 
     res.json(turns);
   } catch (error) {
-    res.status(401).json({ message: "Token inválido o expirado" });
+    res.status(401).json({ message: "Aún no hay turnos asignados" });
   }
 };
 

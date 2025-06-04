@@ -1,47 +1,54 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { PencilSquare } from "react-bootstrap-icons";
 
 const Settings = () => {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [message, setMessage] = useState("");
+  const [variant, setVariant] = useState("danger");
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
-  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch("http://localhost:3000/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         if (!res.ok) throw new Error("Error al obtener usuario");
         const data = await res.json();
         setUser(data);
       } catch (err) {
-        setError(err.message);
+        setVariant("danger");
+        setMessage(err.message);
       }
     };
 
     fetchUser();
   }, []);
 
-  const handleEditClick = (field) => {
+  const openEditModal = (field) => {
     setEditField(field);
     setEditValue(user[field]);
+    setMessage("");
+    setShowEditModal(true);
   };
 
   const handleSave = async () => {
+    if (editValue === user[editField]) {
+      setVariant("warning");
+      setMessage("No hubo cambios");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
 
@@ -51,22 +58,30 @@ const Settings = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          [editField]: editValue,
-        }),
+        body: JSON.stringify({ [editField]: editValue }),
       });
 
       if (!res.ok) {
         const data = await res.json();
+        setVariant("danger");
         throw new Error(data.message || "Error al guardar");
       }
 
       setUser((prev) => ({ ...prev, [editField]: editValue }));
-      setSuccess(`Campo ${editField} actualizado`);
-      setEditField(null);
+      setVariant("success");
+      setMessage(`Campo ${etiquetas[editField] || editField} actualizado`);
+      setShowEditModal(false);
     } catch (err) {
-      setError(err.message);
+      setVariant("danger");
+      setMessage(err.message);
     }
+  };
+
+  const etiquetas = {
+    name: "Nombre",
+    lastName: "Apellido",
+    nroTel: "Teléfono",
+    email: "Email",
   };
 
   const handlePasswordChange = (e) => {
@@ -75,21 +90,23 @@ const Settings = () => {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    setPasswordError("");
+    setMessage("");
 
     if (!passwordForm.currentPassword) {
-      setPasswordError("Debés ingresar la contraseña actual.");
+      setVariant("danger");
+      setMessage("Debés ingresar la contraseña actual.");
       return;
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setPasswordError("Las nuevas contraseñas no coinciden.");
+      setVariant("danger");
+      setMessage("Las nuevas contraseñas no coinciden.");
       return;
     }
 
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:3000/me/password", {
+      const res = await fetch("http://localhost:3000/me", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +123,8 @@ const Settings = () => {
         throw new Error(data.message || "Error al actualizar contraseña");
       }
 
-      setSuccess("Contraseña actualizada correctamente");
+      setVariant("success");
+      setMessage("Contraseña actualizada correctamente");
       setShowPasswordModal(false);
       setPasswordForm({
         currentPassword: "",
@@ -114,187 +132,193 @@ const Settings = () => {
         confirmPassword: "",
       });
     } catch (err) {
-      setPasswordError(err.message);
+      setVariant("danger");
+      setMessage(err.message);
     }
   };
+
+  const handlePasswordModalClose = () => {
+    setShowPasswordModal(false);
+    setPasswordForm({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   if (!user) return <div>Cargando...</div>;
 
   return (
-    <div className="p-4">
-      <h2>Configuración de cuenta</h2>
+    <div className="d-flex flex-column align-items-center justify-content-center text-center">
+      <h2 className="section-title">Configuración de cuenta</h2>
 
-      {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
-
-      <div className="mb-3">
-        <strong>Nombre:</strong>{" "}
-        {editField === "name" ? (
-          <>
-            <input
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-            />
-            <Button className="ms-2" onClick={handleSave}>
-              Guardar
-            </Button>
-            <Button
-              className="ms-2"
-              variant="secondary"
-              onClick={() => setEditField(null)}
-            >
-              Cancelar
-            </Button>
-          </>
-        ) : (
-          <>
-            {user.name}
-            <Button
-              className="ms-2"
-              variant="link"
-              onClick={() => handleEditClick("name")}
-            >
-              Editar
-            </Button>
-          </>
-        )}
-      </div>
-
-      <div className="mb-3">
-        <strong>Apellido:</strong>{" "}
-        {editField === "lastName" ? (
-          <>
-            <input
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-            />
-            <Button className="ms-2" onClick={handleSave}>
-              Guardar
-            </Button>
-            <Button
-              className="ms-2"
-              variant="secondary"
-              onClick={() => setEditField(null)}
-            >
-              Cancelar
-            </Button>
-          </>
-        ) : (
-          <>
-            {user.lastName}
-            <Button
-              className="ms-2"
-              variant="link"
-              onClick={() => handleEditClick("lastName")}
-            >
-              Editar
-            </Button>
-          </>
-        )}
-      </div>
-
-      <div className="mb-3">
-        <strong>Teléfono:</strong>{" "}
-        {editField === "nroTel" ? (
-          <>
-            <input
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-            />
-            <Button className="ms-2" onClick={handleSave}>
-              Guardar
-            </Button>
-            <Button
-              className="ms-2"
-              variant="secondary"
-              onClick={() => setEditField(null)}
-            >
-              Cancelar
-            </Button>
-          </>
-        ) : (
-          <>
-            {user.nroTel}
-            <Button
-              className="ms-2"
-              variant="link"
-              onClick={() => handleEditClick("nroTel")}
-            >
-              Editar
-            </Button>
-          </>
-        )}
-      </div>
-
-      <div className="">
-        <strong>Contraseña:</strong>{" "}
-        <input
-          type="password"
-          value="********"
-          readOnly
-          disabled
-          style={{ width: "150px" }}
-        />
-        <Button
-          className="ms-2"
-          variant="link"
-          onClick={() => setShowPasswordModal(true)}
+      {message && (
+        <Alert
+          variant={variant}
+          className="w-75"
+          onClose={() => setMessage("")}
+          dismissible
+          style={{
+            position: "fixed",
+            top: "110px",
+            zIndex: 9999,
+          }}
         >
-          Cambiar contraseña
-        </Button>
+          {message}
+        </Alert>
+      )}
+
+      <div className="form-container w-75">
+        {["name", "lastName", "nroTel", "email"].map((field) => (
+          <div className="mb-3" key={field}>
+            <strong>
+              {field === "nroTel"
+                ? "Teléfono"
+                : field === "name"
+                ? "Nombre"
+                : field === "lastName"
+                ? "Apellido"
+                : "Email"}
+              :
+            </strong>{" "}
+            <p className="d-flex align-items-center gap-2">
+              <input
+                className="w-100"
+                type="text"
+                value={user[field]}
+                readOnly
+                disabled
+              />
+              <PencilSquare
+                className="edit-button"
+                onClick={() => openEditModal(field)}
+              />
+            </p>
+          </div>
+        ))}
+
+        <div className="mb-3">
+          <strong>Contraseña:</strong>{" "}
+          <p className="d-flex align-items-center gap-2">
+            <input
+              className="w-100"
+              type="text"
+              value={"*******"}
+              readOnly
+              disabled
+            />
+            <PencilSquare
+              className="edit-button"
+              onClick={() => setShowPasswordModal(true)}
+            />
+          </p>
+        </div>
       </div>
 
       <Modal
-        show={showPasswordModal}
-        onHide={() => setShowPasswordModal(false)}
+        show={showEditModal}
+        centered
+        onHide={() => {
+          setShowEditModal(false);
+          setMessage("");
+        }}
+        dialogClassName="edit-modal-dialog"
+        contentClassName="edit-modal-content"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Cambiar contraseña</Modal.Title>
+          <Modal.Title className="edit-modal-title">
+            Editar {etiquetas[editField] || editField}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {passwordError && <Alert variant="danger">{passwordError}</Alert>}
+          <Form.Group className="mb-3">
+            <Form.Label className="edit-modal-label">Nuevo valor</Form.Label>
+            <Form.Control
+              type="text"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              autoFocus
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            className="button-cancel me-2"
+            onClick={() => {
+              setShowEditModal(false);
+              setMessage("");
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button className="button-custom" onClick={handleSave}>
+            Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showPasswordModal}
+        onHide={handlePasswordModalClose}
+        centered
+        dialogClassName="edit-modal-dialog"
+        contentClassName="edit-modal-content"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="edit-modal-title">
+            Cambiar contraseña
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Form onSubmit={handlePasswordSubmit}>
             <Form.Group>
-              <Form.Label>Contraseña actual</Form.Label>
+              <Form.Label className="edit-modal-label">
+                Contraseña actual
+              </Form.Label>
               <Form.Control
                 type="password"
                 name="currentPassword"
                 value={passwordForm.currentPassword}
                 onChange={handlePasswordChange}
-                required
               />
             </Form.Group>
-
             <Form.Group>
-              <Form.Label>Nueva contraseña</Form.Label>
+              <Form.Label className="edit-modal-label">
+                Nueva contraseña
+              </Form.Label>
               <Form.Control
                 type="password"
                 name="newPassword"
                 value={passwordForm.newPassword}
                 onChange={handlePasswordChange}
-                required
               />
             </Form.Group>
-
             <Form.Group>
-              <Form.Label>Confirmar nueva contraseña</Form.Label>
+              <Form.Label className="edit-modal-label">
+                Confirmar nueva contraseña
+              </Form.Label>
               <Form.Control
                 type="password"
                 name="confirmPassword"
                 value={passwordForm.confirmPassword}
                 onChange={handlePasswordChange}
-                required
               />
             </Form.Group>
-
             <div className="mt-3 d-flex justify-content-end">
               <Button
-                variant="secondary"
-                onClick={() => setShowPasswordModal(false)}
+                className="button-cancel me-2"
+                onClick={handlePasswordModalClose}
               >
                 Cancelar
               </Button>
-              <Button type="submit" className="ms-2">
+              <Button type="submit" className="button-custom">
                 Cambiar contraseña
               </Button>
             </div>

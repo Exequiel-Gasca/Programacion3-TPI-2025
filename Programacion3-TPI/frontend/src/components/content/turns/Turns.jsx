@@ -3,14 +3,22 @@ import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./Turns.css";
 import Calendar from "react-calendar";
-import { Form, Container, Row, ListGroup } from "react-bootstrap";
+import {
+  Form,
+  Container,
+  Row,
+  ListGroup,
+  Alert,
+  Button,
+} from "react-bootstrap";
 
 function Turn() {
   const navigate = useNavigate();
   const [barberservices, setBarberservices] = useState([]);
   const [selectedService, setSelectedService] = useState("");
   const [turnos, setTurnos] = useState([]);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [variant, setVariant] = useState("danger");
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("");
 
@@ -20,7 +28,6 @@ function Turn() {
   const generateHours = (selectedDate) => {
     const day = selectedDate.getDay();
     let start, end;
-
     if (day === 6) {
       start = 10;
       end = 14;
@@ -28,7 +35,6 @@ function Turn() {
       start = 8;
       end = 16;
     }
-
     const hours = [];
     for (let h = start; h <= end; h++) {
       hours.push(h);
@@ -54,12 +60,23 @@ function Turn() {
   );
 
   const hours = generateHours(date);
+  const reservedHours = turnosDelDia.map((t) => t.time);
+  const availableHours = hours.filter((h) => !reservedHours.includes(h));
+
+  useEffect(() => {
+    if (time && !availableHours.includes(Number(time))) {
+      setTime("");
+    }
+  }, [date]);
 
   useEffect(() => {
     fetch("http://localhost:3000/nuestrosservicios")
       .then((res) => res.json())
       .then((data) => setBarberservices(data))
-      .catch(() => setError("Error al cargar servicios"));
+      .catch(() => {
+        setVariant("danger");
+        setMessage("Error al cargar servicios");
+      });
   }, []);
 
   useEffect(() => {
@@ -75,14 +92,16 @@ function Turn() {
 
         if (!response.ok) {
           const data = await response.json();
-          setError(data.message || "Error al obtener turnos");
+          setVariant("danger");
+          setMessage(data.message || "Error al obtener turnos");
           return;
         }
 
         const data = await response.json();
         setTurnos(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError("No se pudo conectar con el servidor");
+        setVariant("danger");
+        setMessage("No se pudo conectar con el servidor");
       }
     };
 
@@ -91,18 +110,21 @@ function Turn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setMessage("");
 
     if (!token) {
-      return setError("No estás logueado");
-    }
-
-    if (!selectedService) {
-      return setError("Seleccioná un servicio");
+      setVariant("danger");
+      return setMessage("No estás logueado");
     }
 
     if (!time) {
-      return setError("Seleccioná un horario");
+      setVariant("danger");
+      return setMessage("Seleccioná un horario");
+    }
+
+    if (!selectedService) {
+      setVariant("danger");
+      return setMessage("Seleccioná un servicio");
     }
 
     try {
@@ -121,12 +143,14 @@ function Turn() {
 
       if (!res.ok) {
         const data = await res.json();
+        setVariant("danger");
         throw new Error(data.message || "Error al crear el turno");
       }
 
       setTime("");
       setSelectedService("");
-      setError("");
+      setVariant("success");
+      setMessage("Turno agendado con éxito");
 
       const response = await fetch("http://localhost:3000/turnos", {
         method: "GET",
@@ -135,18 +159,55 @@ function Turn() {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.ok) {
         const data = await response.json();
         setTurnos(Array.isArray(data) ? data : []);
       }
+
+      setTimeout(() => {
+        setMessage("");
+        navigate("/");
+      }, 1000);
     } catch (err) {
-      setError(err.message);
+      setMessage(err.message);
     }
   };
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const tileDisabled = ({ date: tileDate }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tileDay = tileDate.getDay();
+
+    if (tileDay === 0) return true;
+    if (!isAdmin && tileDate < today) return true;
+    return false;
+  };
+
   return (
-    <div>
+    <div className="d-flex flex-column align-items-center justify-content-center text-center">
+      {message && (
+        <Alert
+          variant={variant}
+          className="w-75"
+          onClose={() => setMessage("")}
+          dismissible
+          style={{
+            position: "fixed",
+            top: "110px",
+            zIndex: 9999,
+          }}
+        >
+          {message}
+        </Alert>
+      )}
+
       {isAdmin && (
         <div className="d-flex flex-column align-items-center justify-content-center text-center">
           <h2 className="section-title">Turnos por Día</h2>
@@ -154,10 +215,9 @@ function Turn() {
           <Calendar
             onChange={(newDate) => {
               setDate(newDate);
-              setTime("");
             }}
             value={date}
-            tileDisabled={({ date }) => date.getDay() === 0}
+            tileDisabled={tileDisabled}
             tileContent={({ date, view }) => {
               if (view === "month") {
                 const tieneTurnos = turnos.some(
@@ -186,8 +246,8 @@ function Turn() {
                 </ListGroup.Item>
               ))
             ) : (
-              <ListGroup.Item className="text-center">
-                No hay turnos ese día
+              <ListGroup.Item className="service-item d-flex justify-content-center align-items-center">
+                No hay turnos este día
               </ListGroup.Item>
             )}
           </ListGroup>
@@ -195,69 +255,80 @@ function Turn() {
       )}
 
       {!isAdmin && (
-        <Container style={{ maxWidth: "350px", marginTop: "2rem" }}>
-          <h2 className="text-xl font-bold mb-4">Reservar un turno</h2>
+        <Container style={{ maxWidth: "350px" }}>
+          <h2 className="section-title">Reservar un turno</h2>
 
-          {error && <p className="text-danger">{error}</p>}
-
-          <Row className="justify-content-center">
-            <Calendar
-              onChange={(newDate) => {
-                setDate(newDate);
-                setTime("");
-              }}
-              value={date}
-              tileDisabled={({ date }) => date.getDay() === 0}
-            />
-          </Row>
+          <Calendar
+            onChange={(newDate) => {
+              setDate(newDate);
+            }}
+            value={date}
+            tileDisabled={tileDisabled}
+          />
 
           <Row className="justify-content-center mt-3">
-            <p className="text-center">
+            <p className="text-center" style={{ color: "#745348" }}>
               Fecha seleccionada: {formatDateDMY(date)}
             </p>
           </Row>
 
-          <Row className="justify-content-center mt-3">
-            <Form.Group controlId="hour-select" className="w-100">
-              <Form.Label>Seleccioná un horario:</Form.Label>
-              <Form.Select
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              >
-                <option value="" disabled>
-                  Selecciona el horario
-                </option>
-                {hours.map((h) => (
-                  <option key={h} value={h}>
-                    {h}:00
+          <Form className="form-container" onSubmit={handleSubmit}>
+            <Row className="justify-content-center mt-3">
+              <Form.Group controlId="hour-select" className="w-100">
+                <Form.Label style={{ color: "#2b211e" }}>
+                  Seleccioná un horario:
+                </Form.Label>
+                <Form.Select
+                  className="form-control-custom"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                >
+                  <option value="" disabled hidden>
+                    Selecciona el horario
                   </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+                  {availableHours.length > 0 ? (
+                    availableHours.map((h) => (
+                      <option key={h} value={h}>
+                        {h}:00
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No hay horarios disponibles</option>
+                  )}
+                </Form.Select>
+              </Form.Group>
 
-            <Form.Group controlId="service-select" className="w-100 mt-3">
-              <Form.Label>Seleccioná un servicio:</Form.Label>
-              <Form.Select
-                value={selectedService}
-                onChange={(e) => setSelectedService(e.target.value)}
-              >
-                <option value="">Seleccioná un servicio</option>
-                {barberservices.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.serviceType} - ${service.price}
+              <Form.Group controlId="service-select" className="w-100 mt-3">
+                <Form.Label style={{ color: "#2b211e" }}>
+                  Seleccioná un servicio:
+                </Form.Label>
+                <Form.Select
+                  className="form-control-custom"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                  required
+                >
+                  <option value="" disabled hidden>
+                    Seleccioná un servicio
                   </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Row>
+                  {barberservices.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.serviceType} - ${service.price}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Row>
 
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded mt-3"
-            onClick={handleSubmit}
-          >
-            Reservar
-          </button>
+            <Button
+              type="submit"
+              className="button-custom mt-3"
+              style={{ margin: "25px" }}
+            >
+              Reservar
+            </Button>
+          </Form>
         </Container>
       )}
     </div>

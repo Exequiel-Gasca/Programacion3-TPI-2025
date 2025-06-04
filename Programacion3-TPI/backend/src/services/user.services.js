@@ -209,18 +209,38 @@ export const updateMe = async (req, res) => {
     if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
 
-    const { name, lastName, nroTel, currentPassword, newPassword } = req.body;
+    const { name, lastName, nroTel, email, currentPassword, newPassword } =
+      req.body;
 
     if (name) user.name = name;
     if (lastName) user.lastName = lastName;
     if (nroTel) user.nroTel = nroTel;
 
-    // Si se quiere cambiar la contraseña
+    if (email) {
+      const existingUser = await User.findOne({ where: { email } });
+
+      if (existingUser && existingUser.id !== user.id) {
+        return res
+          .status(400)
+          .json({ message: "Ese email ya está registrado por otro usuario." });
+      }
+
+      user.email = email;
+    }
+
     if (currentPassword || newPassword) {
       if (!currentPassword || !newPassword) {
         return res.status(400).json({
           message:
             "Debes proporcionar tanto la contraseña actual como la nueva.",
+        });
+      }
+
+      const validatePassword = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+      if (!validatePassword.test(newPassword)) {
+        return res.status(400).json({
+          message:
+            "La nueva contraseña debe tener al menos 8 caracteres, incluir una letra y un número.",
         });
       }
 
@@ -238,7 +258,6 @@ export const updateMe = async (req, res) => {
 
     await user.save();
 
-    // No devolvemos la contraseña en la respuesta
     return res.json({
       id: user.id,
       name: user.name,
