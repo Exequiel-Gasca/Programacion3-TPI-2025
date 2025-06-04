@@ -166,7 +166,7 @@ function Turn() {
 
       setTimeout(() => {
         setMessage("");
-        navigate("/");
+        navigate("/my-turns");
       }, 1000);
     } catch (err) {
       setMessage(err.message);

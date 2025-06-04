@@ -14,6 +14,7 @@ import Footer from "./components/ui/footer/Footer";
 import AboutUs from "./components/content/aboutus/AboutUs";
 import FAQ from "./components/content/FAQ/FAQ";
 import Settings from "./components/content/settings/Settings";
+import MyTurns from "./components/content/myturns/myTurns";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -64,6 +65,17 @@ function App() {
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/faq" element={<FAQ />} />
+            {!isAdmin && (
+              <Route
+                path="/my-turns"
+                element={
+                  <Protected isSignedIn={token} isLoading={isLoading}>
+                    {" "}
+                    <MyTurns />
+                  </Protected>
+                }
+              />
+            )}
             <Route
               path="/settings"
               element={

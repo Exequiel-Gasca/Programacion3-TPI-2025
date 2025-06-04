@@ -100,6 +100,11 @@ function NavBar({ token, isAdmin, onLogout }) {
                   <Dropdown.Item href="/settings" className="drop-menu">
                     Configuración
                   </Dropdown.Item>
+                  {!isAdmin && (
+                    <Dropdown.Item href="/my-turns" className="drop-menu">
+                      Mis Turnos
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Divider />
                   <Dropdown.Item
                     className="logout-button"
