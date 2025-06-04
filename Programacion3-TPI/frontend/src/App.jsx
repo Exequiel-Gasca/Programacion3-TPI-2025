@@ -14,6 +14,7 @@ import Footer from "./components/ui/footer/Footer";
 import AboutUs from "./components/content/aboutus/AboutUs";
 import FAQ from "./components/content/FAQ/FAQ";
 import Settings from "./components/content/settings/Settings";
+import Myturns from "./components/content/myturns/Myturns";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -64,7 +65,24 @@ function App() {
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/settings" element={<Protected isSignedIn={token} isLoading={isLoading}> <Settings /></Protected>} />
+            <Route
+              path="/settings"
+              element={
+                <Protected isSignedIn={token} isLoading={isLoading}>
+                  {" "}
+                  <Settings />
+                </Protected>
+              }
+            />
+            <Route
+              path="/my-turns"
+              element={
+                <Protected isSignedIn={token} isLoading={isLoading}>
+                  {" "}
+                  <Myturns />
+                </Protected>
+              }
+            />
             <Route
               path="/register"
               element={<Register setMessage={setMessage} />}

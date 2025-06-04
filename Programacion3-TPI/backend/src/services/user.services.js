@@ -215,7 +215,6 @@ export const updateMe = async (req, res) => {
     if (lastName) user.lastName = lastName;
     if (nroTel) user.nroTel = nroTel;
 
-    // Si se quiere cambiar la contraseña
     if (currentPassword || newPassword) {
       if (!currentPassword || !newPassword) {
         return res.status(400).json({
