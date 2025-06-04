@@ -209,14 +209,44 @@ export const updateMe = async (req, res) => {
     if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
 
-    const { name, lastName, nroTel } = req.body;
+    const { name, lastName, nroTel, currentPassword, newPassword } = req.body;
 
     if (name) user.name = name;
     if (lastName) user.lastName = lastName;
     if (nroTel) user.nroTel = nroTel;
 
+    // Si se quiere cambiar la contraseña
+    if (currentPassword || newPassword) {
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          message:
+            "Debes proporcionar tanto la contraseña actual como la nueva.",
+        });
+      }
+
+      const isValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isValid) {
+        return res
+          .status(401)
+          .json({ message: "Contraseña actual incorrecta." });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hashed = await bcrypt.hash(newPassword, salt);
+      user.password = hashed;
+    }
+
     await user.save();
-    return res.json(user);
+
+    // No devolvemos la contraseña en la respuesta
+    return res.json({
+      id: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      nroTel: user.nroTel,
+      email: user.email,
+      role: user.role,
+    });
   } catch (error) {
     console.error("Error actualizando perfil:", error);
     return res.status(500).json({ message: "Error al actualizar el perfil" });

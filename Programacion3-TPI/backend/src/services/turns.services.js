@@ -37,7 +37,7 @@ export const createTurn = async (req, res) => {
     res.status(201).json(newTurn);
   } catch (error) {
     console.error(error);
-    res.status(401).json({ message: "Token inválido o expirado" });
+    res.status(401).json({ message: "Error al crear el turno" });
   }
 };
 

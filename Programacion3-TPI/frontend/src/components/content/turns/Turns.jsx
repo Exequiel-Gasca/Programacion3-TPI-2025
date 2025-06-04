@@ -37,6 +37,11 @@ function Turn() {
   };
 
   const formatDateDMY = (date) => {
+    if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const [year, month, day] = date.split("-");
+      return `${day}/${month}/${year}`;
+    }
+
     const d = new Date(date);
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -44,7 +49,6 @@ function Turn() {
     return `${day}/${month}/${year}`;
   };
 
-  // Filtrar los turnos del día seleccionado
   const turnosDelDia = turnos.filter(
     (t) => formatDateDMY(t.date) === formatDateDMY(date)
   );
@@ -109,8 +113,8 @@ function Turn() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          date: date.toISOString(), // guardamos la fecha en formato ISO
-          time: Number(time), // convertimos time a número
+          date: date.toISOString(),
+          time: Number(time),
           barberserviceId: selectedService,
         }),
       });
@@ -120,12 +124,10 @@ function Turn() {
         throw new Error(data.message || "Error al crear el turno");
       }
 
-      // Resetear campos luego de reservar
       setTime("");
       setSelectedService("");
       setError("");
 
-      // Recargar turnos para actualizar la lista
       const response = await fetch("http://localhost:3000/turnos", {
         method: "GET",
         headers: {
